@@ -1,27 +1,59 @@
  // deposit and main balance
- document.getElementById('deposit-btn').addEventListener('click', function() {
-         let depositInput = document.getElementById('deposit-input');
-         // console.log(depositInput.value);
-         let depositBlance = document.getElementById('deposit-balance');
-         // console.log(depositBlance.innerText);
-         let depositTotalAmout = parseFloat(depositInput.value) + parseFloat(depositBlance.innerText);
-         depositBlance.innerText = depositTotalAmout;
-         let mainBalance = document.getElementById('main-balance');
-         let mainBalanceTotal = parseFloat(mainBalance.innerText) + parseFloat(depositInput.value);
-         mainBalance.innerText = mainBalanceTotal;
-         depositInput.value = '';
 
-     })
-     // withdraw and main balance
+ function inputField(input) {
+     let inputGet = document.getElementById(input);
+     let inputText = inputGet.value;
+     let inputValue = parseFloat(inputText);
+     inputGet.value = '';
+     return inputValue;
+ }
+
+ function balanceField(balance, balanceInput) {
+     let outputBlance = document.getElementById(balance);
+     let outputTotalAmout = parseFloat(outputBlance.innerText) + balanceInput;
+     outputBlance.innerText = outputTotalAmout;
+ }
+
+ function mainBalanceResult(originalBalance, isAdd, mainInput) {
+     let mainBalance = document.getElementById(originalBalance);
+     if (isAdd == true) {
+         let mainBalanceTotal = parseFloat(mainBalance.innerText) + mainInput;
+         mainBalance.innerText = mainBalanceTotal;
+     } else {
+
+         let mainBalanceTotal = parseFloat(mainBalance.innerText) - mainInput;
+         mainBalance.innerText = mainBalanceTotal;
+
+     }
+ }
+
+ function cuurentMomentBalance(currentTimeBalance) {
+     let currentBalance = document.getElementById(currentTimeBalance);
+     let currentBalanceValue = parseFloat(currentBalance.innerText);
+     currentBalance.innerText = currentBalanceValue;
+     return currentBalanceValue;
+ }
+
+ document.getElementById('deposit-btn').addEventListener('click', function() {
+     let depositInput = inputField('deposit-input');
+     if (depositInput > 0) {
+
+         balanceField('deposit-balance', depositInput);
+
+         mainBalanceResult('main-balance', true, depositInput)
+     }
+ })
+
  document.getElementById('withdraw-btn').addEventListener('click', function() {
 
-     let withdrawInput = document.getElementById('withdraw-input');
-     let withdrawBalance = document.getElementById('withdraw-balance');
-     let withdrawTotalBalance = parseFloat(withdrawBalance.innerText) + parseFloat(withdrawInput.value);
-     withdrawBalance.innerText = withdrawTotalBalance;
-     let mainBalance = document.getElementById('main-balance');
-     let mainBalanceTotal = parseFloat(mainBalance.innerText) - parseFloat(withdrawInput.value);
-     mainBalance.innerText = mainBalanceTotal;
-     withdrawInput.value = '';
+     let withdrawInput = inputField('withdraw-input');
+     let actualCurrentBalance = cuurentMomentBalance('main-balance');
+     if (withdrawInput > 0 && withdrawInput <= actualCurrentBalance) {
+
+         balanceField('withdraw-balance', withdrawInput);
+
+         mainBalanceResult('main-balance', false, withdrawInput);
+     }
+
 
  })
